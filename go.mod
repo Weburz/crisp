@@ -1,4 +1,4 @@
-module github.com/Jarmos-san/gitlint
+module github.com/Weburz/crisp
 
 go 1.22.2
 
