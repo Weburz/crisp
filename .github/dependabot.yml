@@ -1,0 +1,35 @@
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    commit-message:
+      prefix: "chore: "
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "npm"
+    directory: "./docs"
+    schedule:
+      interval: "monthly"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    commit-message:
+      prefix: "chore(deps-docs): "
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "06:00"
+      timezone: "Asia/Kolkata"
+    commit-message:
+      prefix: "chore: "
+    labels:
+      - "dependencies"
