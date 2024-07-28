@@ -1,11 +1,18 @@
 # Crisp: A Git Commit Message Linter
 
+<!-- prettier-ignore-start -->
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/Weburz/crisp) ![Discord](https://img.shields.io/discord/1259044007342772256) ![GitHub License](https://img.shields.io/github/license/Weburz/crisp)
+<!-- prettier-ignore-end -->
+
 Crisp is an opinionated linter for
 [`-git-commit`](https://git-scm.com/docs/git-commit) messages built on top of
 the [Conventional Commits](https://www.conventionalcommits.org) specifications.
 It is built in response to cater to certain requirements that
 [`commitlint`](https://commitlint.js.org) could not fulfill our needs at
 [Weburz](https://weburz.com).
+
+**NOTE**: Crisp is still a **WORK-IN-PROGRESS** project and **IS NOT**
+recommended for usage in production environments yet!
 
 ## Why Crisp Exists?
 
