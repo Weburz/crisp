@@ -5,9 +5,9 @@
 <!-- prettier-ignore-end -->
 
 Crisp is an opinionated linter for
-[`-git-commit`](https://git-scm.com/docs/git-commit) messages built on top of
-the [Conventional Commits](https://www.conventionalcommits.org) specifications.
-It is built in response to cater to certain requirements that
+[`git-commit`](https://git-scm.com/docs/git-commit) messages built on top of the
+[Conventional Commits](https://www.conventionalcommits.org) specifications. It
+is built in response to cater to certain requirements that
 [`commitlint`](https://commitlint.js.org) could not fulfill our needs at
 [Weburz](https://weburz.com).
 
