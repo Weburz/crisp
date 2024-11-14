@@ -1,27 +1,30 @@
 package cmd
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
+var shortUsage = `
+Lint a Git commit message.
+`
+
+var longUsage = `
+Lint a Git commit message.
+
+Use this command to lint Git commit messages according to the Conventional
+Commit v1.0.0 specifications. To learn more about the specifications, refer to
+its the documentations here - https://www.conventionalcommits.org.
+`
+
 var messageCmd = &cobra.Command{
 	Use:     "message",
-	Short:   "The commit message to lint",
+	Aliases: []string{"msg"},
+	Short:   shortUsage,
+	Long:    longUsage,
 	Example: "crisp message \"chore: fix an annoying bug\"",
-
-	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return errors.New("requires at least one arg")
-		}
-
-		return fmt.Errorf("invalid colour specified: %s", args[0])
-	},
-
+	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(args)
+		rootCmd.Println(args[0])
 	},
 }
 
