@@ -1,15 +1,16 @@
 package cmd
 
 import (
+	"bufio"
+	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 )
 
-var shortUsage = `
-Lint a Git commit message.
-`
+var shortUsage = `Lint a Git commit message.`
 
-var longUsage = `
-Lint a Git commit message.
+var longUsage = `Lint a Git commit message.
 
 Use this command to lint Git commit messages according to the Conventional
 Commit v1.0.0 specifications. To learn more about the specifications, refer to
@@ -22,12 +23,38 @@ var messageCmd = &cobra.Command{
 	Short:   shortUsage,
 	Long:    longUsage,
 	Example: "crisp message \"chore: fix an annoying bug\"",
-	Args:    cobra.ExactArgs(1),
+	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		rootCmd.Println(args[0])
+		useStdin, _ := cmd.Flags().GetBool("stdin")
+
+		var message string
+
+		// If --stdin is set, read from stdin (piped input)
+		if useStdin {
+			// Read input from stdin
+			scanner := bufio.NewScanner(os.Stdin)
+			if scanner.Scan() {
+				message = scanner.Text()
+			}
+			if err := scanner.Err(); err != nil {
+				fmt.Println("Error reading from stdin:", err)
+				return
+			}
+		} else {
+			// If stdin isn't used, take the first argument as the message
+			message = args[0]
+		}
+
+		// Output the message (this can be replaced with your linting logic)
+		fmt.Println(message)
 	},
 }
 
 func init() {
+	// Add the "--stdin" flag to the message command
+	messageCmd.Flags().
+		BoolP("stdin", "s", false, "Read message from STDIN instead of arguments")
+
+	// Add the "message" command to the root command
 	rootCmd.AddCommand(messageCmd)
 }
