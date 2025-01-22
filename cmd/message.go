@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+
+	"github.com/Weburz/crisp/internal/parser"
 )
 
 var shortUsage = `Lint a Git commit message.`
@@ -45,8 +47,17 @@ var messageCmd = &cobra.Command{
 			message = args[0]
 		}
 
-		// Output the message (this can be replaced with your linting logic)
-		fmt.Println(message)
+		// Convert the git-commit message into a Go struct for further validation
+		msg, err := parser.ParseMessage(message)
+
+		if err != nil {
+			cmd.PrintErrf("error: %s\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Printf("Type: %s\n", msg.Type)
+		fmt.Printf("Scope: %s\n", msg.Scope)
+		fmt.Printf("Description: %s\n", msg.Description)
 	},
 }
 
