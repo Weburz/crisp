@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/Weburz/crisp/internal/parser"
+	"github.com/Weburz/crisp/internal/validator"
 )
 
 var shortUsage = `Lint a Git commit message.`
@@ -50,14 +51,15 @@ var messageCmd = &cobra.Command{
 		// Convert the git-commit message into a Go struct for further validation
 		msg, err := parser.ParseMessage(message)
 
+		// Raise an error and exit with non-zero status if the parsing logic failed
 		if err != nil {
 			cmd.PrintErrf("error: %s\n", err)
 			os.Exit(1)
 		}
 
-		fmt.Printf("Type: %s\n", msg.Type)
-		fmt.Printf("Scope: %s\n", msg.Scope)
-		fmt.Printf("Description: %s\n", msg.Description)
+		// Validate the "git-commit" message
+		status := validator.ValidateMessage(&msg)
+		fmt.Println(status)
 	},
 }
 

@@ -9,16 +9,16 @@ import (
 )
 
 /**
- * Message - A struct to represent a git-commit message.
+ * Message - A struct to represent a git-commit Message.
  *
  * Fields:
- *   Type:        A string representing the type of the message.
- *   Scope:       A string indicating the scope or category of the message.
- *   Description: A brief description or title of the message.
- *   Body:        The main content or body of the message.
- *   Footer:      Additional information or footer text to accompany the message.
+ *   Type:        A string representing the type of the Message.
+ *   Scope:       A string indicating the scope or category of the Message.
+ *   Description: A brief description or title of the Message.
+ *   Body:        The main content or body of the Message.
+ *   Footer:      Additional information or footer text to accompany the Message.
  */
-type message struct {
+type Message struct {
 	Type        string // Type of the message (e.g., "info", "error")
 	Scope       string // Scope of the message (e.g., "global", "user")
 	Description string // A brief description or title of the message
@@ -35,7 +35,7 @@ type message struct {
   * Returns:
   *   None
 */
-func ParseMessage(input string) (message, error) {
+func ParseMessage(input string) (Message, error) {
 	re := regexp.MustCompile(
 		`^(?P<Type>\w+)(?:\((?P<Scope>\w+)\))?: \s*(?P<Description>.+)$`,
 	)
@@ -43,10 +43,10 @@ func ParseMessage(input string) (message, error) {
 	matches := re.FindStringSubmatch(input)
 
 	if matches == nil {
-		return message{}, fmt.Errorf("invalid commit message format")
+		return Message{}, fmt.Errorf("invalid commit message format")
 	}
 
-	return message{
+	return Message{
 		Type:        matches[1],
 		Scope:       matches[2],
 		Description: matches[3],
