@@ -1,0 +1,24 @@
+name: Create a Release
+
+on:
+  push:
+    tags:
+      - v**.**.**
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    name: Create a Public Release Version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="v${TAG#v}" \
+            --generate-notes
