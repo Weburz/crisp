@@ -208,4 +208,7 @@ dist
 ### Starlight ###
 **/.astro
 
+### Taskfile ###
+.task
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,vim,go
