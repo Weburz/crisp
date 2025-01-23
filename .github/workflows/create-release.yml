@@ -3,7 +3,8 @@ name: Create a Release
 on:
   push:
     tags:
-      - v**.**.**
+      - "v*.*.*"
+      - "!v*.*.*-alpha"
 
 permissions:
   contents: write
