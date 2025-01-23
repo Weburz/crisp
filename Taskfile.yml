@@ -1,0 +1,90 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Run the binary in "dev mode".
+    summary: |
+      Run the binary for development needs.
+
+      This command will build a development version of the tool before invoking it in
+      the current shell environment. Do note, this will run an unoptimised version of
+      the tool and is only useful during development.
+    cmd: go run main.go
+
+  install:
+    internal: true
+    desc: Install the dependencies for the project ONLY.
+    sources:
+      - go.mod
+    generates:
+      - go.sum
+    cmds:
+      - go mod download
+      - go mod tidy
+
+  setup:
+    desc: Setup the project for development.
+    summary: |
+      Setup the project for development.
+
+      This command will setup the project for local development. The command will
+      abstract away installation of the dependencies of the project and its
+      documentations as well.
+    cmds:
+      - task: install
+      - task: docs:setup
+
+  build:
+    desc: Build the binary for the current system architecture.
+    summary: |
+      Compile and build the binary.
+
+      This command will compile the source code and build the binary for the current
+      system architecture. Do note, it will not build the binary for the target
+      architecture unless specified.
+    vars:
+      VERSION:
+        sh: "git describe --tags --always --dirty"
+      GIT_VERSION:
+        sh: "git --version | awk '{print $3}'"
+      GIT_COMMIT:
+        sh: "git rev-parse --short HEAD"
+      BUILD_DATE:
+        sh: "date -u '+%Y-%m-%d'"
+    cmd: |
+      go build -ldflags "\
+      -X github.com/Weburz/crisp/internal/version.version={{.VERSION}} \
+      -X github.com/Weburz/crisp/internal/version.gitVersion={{.GIT_VERSION}} \
+      -X github.com/Weburz/crisp/internal/version.gitCommit={{.GIT_COMMIT}} \
+      -X github.com/Weburz/crisp/internal/version.buildDate={{.BUILD_DATE}}" \
+      -o ./bin/crisp
+    sources:
+      - "*.go"
+    generates:
+      - ./bin/crisp
+
+  docs:
+    desc: Run the dev server for the docs.
+    summary: |
+      Run the dev server for the docs.
+
+      This command will intelligently run the documentation's server from the
+      appropriate directory. Use this command during development to work on the docs or
+      use it for local reference.
+    dir: ./docs
+    cmd: pnpm dev
+
+  docs:setup:
+    desc: Install and setup the documentations.
+    summary: |
+      Setup the documentations.
+
+      This command will setup the documentations before development on the project can
+      be started. It will install all necessary dependencies and the prerequisites to
+      document the project.
+    dir: ./docs
+    cmd: pnpm install --frozen-lockfile
+    sources:
+      - package.json
+    generates:
+      - pnpm-lock.json
