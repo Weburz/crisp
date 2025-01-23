@@ -58,8 +58,12 @@ var messageCmd = &cobra.Command{
 		}
 
 		// Validate the "git-commit" message
-		status := validator.ValidateMessage(&msg)
-		fmt.Println(status)
+		if status, err := validator.ValidateMessage(&msg); err != nil {
+			cmd.PrintErrf("error: %s\n", err)
+			os.Exit(1)
+		} else {
+			fmt.Println(status)
+		}
 	},
 }
 
