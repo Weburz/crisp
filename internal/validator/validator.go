@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"unicode"
 
 	"github.com/Weburz/crisp/internal/parser"
 )
@@ -92,6 +93,30 @@ func checkMessageScope(s *string) error {
 }
 
 /**
+ * checkMessageScope - Validates the casing of a commit message scope.
+ *
+ * This function checks if the provided commit message scope is lowercase. If the scope
+ * is provided and not in lowercase, it returns an error with a suggestion to correct
+ * the casing. If no scope is provided, no validation is performed.
+ *
+ * Parameters:
+ *  - s (*string): A pointer to the commit message scope. Can be an empty string or a
+ *    valid scope (e.g., "feat", "fix").
+ *
+ * Returns:
+ *  - error: Returns an error if the scope is provided and not lowercase; nil otherwise.
+ */
+func checkMessageSubject(s *string) error {
+	if unicode.IsUpper(rune((*s)[0])) || rune((*s)[len((*s))-1]) == '.' {
+		return fmt.Errorf(
+			"commit message subject should be lowercased & not end with a period(.)",
+		)
+	}
+
+	return nil
+}
+
+/**
  * ValidateMessage: Validate a "git-commit" message.
  *
  * Parameters:
@@ -109,6 +134,11 @@ func ValidateMessage(message *parser.Message) (string, error) {
 
 	// Validate the commit message scope
 	if err := checkMessageScope(&message.Scope); err != nil {
+		return "", fmt.Errorf("%s", err)
+	}
+
+	// Validate the commit message subject
+	if err := checkMessageSubject(&message.Description); err != nil {
 		return "", fmt.Errorf("%s", err)
 	}
 
