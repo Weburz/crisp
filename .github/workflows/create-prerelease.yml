@@ -12,7 +12,30 @@ jobs:
   create-release:
     name: Create a Pre-Release Version
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Go
+        uses: actions/setup-go@v5.3.0
+        with:
+          go-version-file: ./go.mod
+
+      - name: Build the Go Binary
+        run: |
+          VERSION=${{ github.ref_name }}
+          GIT_VERSION=$(git describe --tags --always)
+          GIT_COMMIT=$(git rev-parse --short HEAD)
+          BUILD_DATE=$(date -u '+%Y-%m-%d')
+
+          go build -ldflags "\
+          -X github.com/Weburz/crisp/internal/version.version=$VERSION \
+          -X github.com/Weburz/crisp/internal/version.gitVersion=$GIT_VERSION \
+          -X github.com/Weburz/crisp/internal/version.gitCommit=$GIT_COMMIT \
+          -X github.com/Weburz/crisp/internal/version.buildDate=$BUILD_DATE" \
+          -o ./bin/crisp
+
       - name: Create Pre-Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -22,4 +45,5 @@ jobs:
             --repo="$GITHUB_REPOSITORY" \
             --title="v${TAG#v}" \
             --generate-notes \
-            --prerelease
+            --prerelease \
+            ./bin/crisp
