@@ -63,6 +63,35 @@ func checkMessageType(t *string) error {
 }
 
 /**
+ * checkMessageScope - Validates the casing of a commit message scope.
+ *
+ * This function checks if the provided commit message scope is in lowercase. If the
+ * scope is provided and not in lowercase, it returns an error with the correct casing
+ * suggestion. If no scope is provided, no validation occurs.
+ *
+ * Parameters:
+ *  - s (*string): A pointer to the commit message scope. It can be an empty string or
+ *    a valid scope (e.g., "feat", "fix").
+ *
+ * Returns:
+ *  - error: Returns an error if the scope is provided and not in lowercase.
+ *    Returns nil if the scope is valid or empty.
+ */
+func checkMessageScope(s *string) error {
+	if *s != "" {
+		if *s != strings.ToLower(*s) {
+			return fmt.Errorf(
+				"invalid commit message scope casing, \"%s\" should be \"%s\"",
+				*s,
+				strings.ToLower(*s),
+			)
+		}
+	}
+
+	return nil
+}
+
+/**
  * ValidateMessage: Validate a "git-commit" message.
  *
  * Parameters:
@@ -75,6 +104,11 @@ func checkMessageType(t *string) error {
 func ValidateMessage(message *parser.Message) (string, error) {
 	// Validate the commit message type and return an appropriate message else an error
 	if err := checkMessageType(&message.Type); err != nil {
+		return "", fmt.Errorf("%s", err)
+	}
+
+	// Validate the commit message scope
+	if err := checkMessageScope(&message.Scope); err != nil {
 		return "", fmt.Errorf("%s", err)
 	}
 
