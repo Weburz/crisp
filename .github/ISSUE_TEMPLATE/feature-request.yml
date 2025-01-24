@@ -1,0 +1,22 @@
+name: Feature Request
+description: Suggest a feature request or an enhancement
+title: "[ENHANCEMENT]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for recommending the enhancement!
+  - type: textarea
+    id: feature-enhancement
+    attributes:
+      label: Explain the feature
+      description:
+        Explain the enhancement or feature requests you have in mind, in as much
+        details as possible.
+      placeholder: Explain the feature and/or the enhancement in full detail.
+      value:
+        Implement XYZ feature which provides so and so capabilities to the
+        website...
+    validations:
+      required: true
