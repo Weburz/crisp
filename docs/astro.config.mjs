@@ -1,31 +1,27 @@
-// @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
 export default defineConfig({
+  site: "https://weburz.github.io/crisp",
+  base: "crisp",
   integrations: [
     starlight({
-      title: "My Docs",
-      social: {
-        github: "https://github.com/withastro/starlight",
+      title: "Crisp",
+      description: "A linter for Git commit messages.",
+      editLink: {
+        baseUrl: "https://github.com/Weburz/crisp/edit/main/docs",
       },
-      sidebar: [
-        {
-          label: "Guides",
-          items: [
-            // Each item here is one entry in the navigation menu.
-            { label: "Example Guide", slug: "guides/example" },
-          ],
-        },
-        {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
-        },
-        {
-          label: "Development Guide",
-          autogenerate: { directory: "dev-guide" },
-        },
-      ],
+      social: {
+        github: "https://github.com/Weburz/crisp",
+        discord: "https://discord.gg/QeYqwyxBhR",
+        email: "mailto:contact@weburz.com",
+        facebook: "https://www.facebook.com/Weburz",
+        instagram: "https://www.instagram.com/weburzit",
+        linkedin: "https://www.linkedin.com/company/weburz",
+        youtube: "https://www.youtube.com/@Weburz",
+        twitter: "https://x.com/weburz",
+      },
+      lastUpdated: true,
     }),
   ],
 });
