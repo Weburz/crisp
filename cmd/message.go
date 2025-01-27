@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
 
 	"github.com/Weburz/crisp/internal/parser"
+	"github.com/Weburz/crisp/internal/reader"
 	"github.com/Weburz/crisp/internal/validator"
 )
 
@@ -32,19 +32,10 @@ var messageCmd = &cobra.Command{
 
 		var message string
 
-		// If --stdin is set, read from stdin (piped input)
+		// Read from STDIN if possible else read from the flag passed to the command
 		if useStdin {
-			// Read input from stdin
-			scanner := bufio.NewScanner(os.Stdin)
-			if scanner.Scan() {
-				message = scanner.Text()
-			}
-			if err := scanner.Err(); err != nil {
-				fmt.Println("Error reading from stdin:", err)
-				return
-			}
+			message, _ = reader.ReadStdin()
 		} else {
-			// If stdin isn't used, take the first argument as the message
 			message = args[0]
 		}
 
