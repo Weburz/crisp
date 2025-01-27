@@ -1,0 +1,7 @@
+- id: crisp
+  name: crisp
+  description: Lint git-commit messages
+  language: golang
+  entry: crisp message --stdin
+  pass_filenames: false
+  always_run: true
