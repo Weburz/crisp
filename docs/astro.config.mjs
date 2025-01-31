@@ -22,6 +22,23 @@ export default defineConfig({
         twitter: "https://x.com/weburz",
       },
       lastUpdated: true,
+      sidebar: [
+        {
+          label: "About Crisp",
+          items: [
+            { label: "Introduction", slug: "intro" },
+            { label: "Why Crisp Exists", slug: "why-crisp-exists" },
+          ],
+        },
+        {
+          label: "Usage Guide",
+          items: [{ label: "Pre-Commit Hook", slug: "usage-guide" }],
+        },
+        {
+          label: "Development Guide",
+          items: [{ label: "Contributing to Crisp", slug: "dev-guide" }],
+        },
+      ],
     }),
   ],
 });
