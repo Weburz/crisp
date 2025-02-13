@@ -26,7 +26,7 @@ jobs:
               run: go test ./... -v | tee test-result.log
             
             - name: Install Test Report
-              run: go install github.com/Becheran/go-testreport@latest
+              run: go install github.com/becheran/go-testreport@latest
             
             - name: Generate Test Report
               run: cat test-results.log | go-testreport > test-report.md
