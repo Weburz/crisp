@@ -1,0 +1,39 @@
+name: CI test suit
+
+on: 
+    push:
+        branches: [main]
+    pull_request: 
+        branches: [main]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+
+            - name: Setup go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: 1.21
+
+            - name: Install Dependencies
+              run: go mod tody
+            
+            - name: Run Tests
+              run: go test ./.. -v | tee test-result.log
+            
+            - name: Install Test Report
+              run: go install github.com/Becheran/go-testreport@latest
+            
+            - name: Generate Test Report
+              run: cat test-results.log | go-testreport > test-report.md
+
+            - name: Publish Test Report
+              run: cat test-report.md >> $GITHUB_STEP_SUMMARY
+
+            - name: Enforce Passing Test
+              if: failure()
+              run: exit 1
