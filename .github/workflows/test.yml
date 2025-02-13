@@ -20,10 +20,10 @@ jobs:
                   go-version: 1.21
 
             - name: Install Dependencies
-              run: go mod tody
+              run: go mod tidy
             
             - name: Run Tests
-              run: go test ./.. -v | tee test-result.log
+              run: go test ./... -v | tee test-result.log
             
             - name: Install Test Report
               run: go install github.com/Becheran/go-testreport@latest
