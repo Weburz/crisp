@@ -23,7 +23,7 @@ jobs:
               run: go mod tidy
             
             - name: Run Tests
-              run: go test ./... -v | tee test-results.log
+              run: go test ./... -json | tee test-results.log
             
             - name: Install Test Report
               run: go install github.com/becheran/go-testreport@v0.2.2
