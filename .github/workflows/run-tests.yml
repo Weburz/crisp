@@ -34,4 +34,4 @@ jobs:
 
             - name: 📊 Generate Test Report
               run: |
-                go-testreport -stdin < test-results.json | tee test-report.md >> $GITHUB_STEP_SUMMARY
+                go-testreport -json test-results.json -output $GITHUB_STEP_SUMMARY
