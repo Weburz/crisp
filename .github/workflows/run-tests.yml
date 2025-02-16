@@ -24,13 +24,13 @@ jobs:
             - name: 📦 Install Dependencies
               run: go mod tidy
 
-            - name: 🛠️ Run Tests
-              run: |
-                go test ./... -json | go-testreport > test-results.json
-
             - name: 📥 Install go-testreport (Pinned Version)
               run: |
                 go install github.com/becheran/go-testreport@v0.2.2
+                
+            - name: 🛠️ Run Tests
+              run: |
+                go test ./... -json | go-testreport > test-results.json
 
             - name: 📊 Generate Test Report
               run: |
