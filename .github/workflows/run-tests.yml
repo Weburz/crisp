@@ -27,11 +27,11 @@ jobs:
             - name: 📥 Install go-testreport (Pinned Version)
               run: |
                 go install github.com/becheran/go-testreport@v0.2.2
-                
+
             - name: 🛠️ Run Tests
               run: |
                 go test ./... -json | go-testreport > test-results.json
 
             - name: 📊 Generate Test Report
               run: |
-                go-testreport -json test-results.json -output $GITHUB_STEP_SUMMARY
+                go-testreport -input test-results.json -output $GITHUB_STEP_SUMMARY
