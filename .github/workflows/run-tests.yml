@@ -5,7 +5,7 @@ on:
         branches: 
           - main
     pull_request: 
-        branches:
+        branches: 
           - main
 
 jobs:
@@ -13,22 +13,25 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout Code
+            - name: 📥 Checkout Code
               uses: actions/checkout@v4
 
-            - name: Setup go
+            - name: 🏗️ Set Up Go
               uses: actions/setup-go@v5
               with:
                   go-version: 1.23
 
-            - name: Install Dependencies
+            - name: 📦 Install Dependencies
               run: go mod tidy
-            
-            - name: Run Tests
-              run: go test ./... -json > test-results.json
-            
-            - name: Install Test Report
-              run: go install github.com/becheran/go-testreport@v0.2.2
-            
-            - name: Generate Test Report
-              run: go-testreport -stdin < test-results.json | tee test-report.md >> $GITHUB_STEP_SUMMARY
+
+            - name: 🛠️ Run Tests
+              run: |
+                go test ./... -json > test-results.json
+
+            - name: 📥 Install go-testreport (Pinned Version)
+              run: |
+                go install github.com/becheran/go-testreport@v0.2.2
+
+            - name: 📊 Generate Test Report
+              run: |
+                go-testreport -stdin < test-results.json | tee test-report.md >> $GITHUB_STEP_SUMMARY
