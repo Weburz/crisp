@@ -26,7 +26,7 @@ jobs:
 
             - name: 🛠️ Run Tests
               run: |
-                go test ./... -json > | go-testreport > test-results.json
+                go test ./... -json | go-testreport > test-results.json
 
             - name: 📥 Install go-testreport (Pinned Version)
               run: |
