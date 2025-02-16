@@ -24,10 +24,14 @@ jobs:
             - name: 📦 Install Dependencies
               run: go mod tidy
 
+            - name: 📥 Install go-testreport
+              run: |
+                go install github.com/becheran/go-testreport@v0.2.2
+
             - name: 🛠️ Run Tests & Save JSON Output
-              run: go test ./... -json > test-results.json
+              run: |
+                go test ./... -json > test-results.json
 
             - name: 📊 Generate and Publish Test Report
-              uses: becheran/go-testreport-action@v2
-              with:
-                  json-file: test-results.json
+              run: |
+                go-testreport -input test-results.json -o $GITHUB_STEP_SUMMARY
