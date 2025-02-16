@@ -34,4 +34,4 @@ jobs:
 
             - name: 📊 Generate and Publish Test Report
               run: |
-                go-testreport -input test-results.json -o $GITHUB_STEP_SUMMARY
+                go-testreport -input test-results.json -output $GITHUB_STEP_SUMMARY
