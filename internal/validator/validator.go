@@ -117,6 +117,26 @@ func checkMessageSubject(s *string) error {
 }
 
 /**
+ * checkMessageLength - Checks if the commit message is equal to or under 50 characters.
+ *
+ * This function ensures the commit message does not exceed 50 characters in length.
+ *
+ * Parameters:
+ *  - l (*string): A pointer to the string representing the length of the commit message.
+ *
+ * Returns:
+ *  - error: Returns an error if the commit message is more than 50 characters.
+ *			 Returns nil if the message is within the valid length
+ */
+
+func checkMessageLength(l *string) error {
+	if len(*l) >= 50 {
+		return fmt.Errorf("commit message exceeds 50 characters, current length: %d", len(*l))
+	}
+	return nil
+}
+
+/**
  * ValidateMessage: Validate a "git-commit" message.
  *
  * Parameters:
@@ -139,6 +159,11 @@ func ValidateMessage(message *parser.Message) (string, error) {
 
 	// Validate the commit message subject
 	if err := checkMessageSubject(&message.Description); err != nil {
+		return "", fmt.Errorf("%s", err)
+	}
+
+	// Validate the commit message length
+	if err := checkMessageLength(&message.Description); err != nil {
 		return "", fmt.Errorf("%s", err)
 	}
 
