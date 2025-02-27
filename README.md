@@ -6,8 +6,7 @@
 ![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/weburz)
 ![GitHub Release](https://img.shields.io/github/v/release/Weburz/crisp)
 <!-- prettier-ignore-end -->
-5c0adc5d6c1d820080270071131032c142117fa3
-4f666ed8d41cc286c74c7d00a47cc760d717121d
+
 Crisp is a linter for [git-commit](https://git-scm.com/docs/git-commit) messages
 built on top of [Conventional Commits](https://www.conventionalcommits.org). It
 was built in response to the following requirements we needed at
