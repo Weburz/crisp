@@ -4,7 +4,7 @@ title: Software Requirements Specifications (SRS)
 
 This section of the documentations contains the "Software Requirements
 Specifications (SRS)" for Crisp. All feature enhancements and related
-development on the project will be based on the criterias listed here on this
+development on the project will be based on the criteria listed here on this
 document. Any other feature request or behaviour of the tool which can be
 considered out-of-scope of this document will not be worked upon. In case, a
 functionality or behaviour has been heavily requested by community members, the
