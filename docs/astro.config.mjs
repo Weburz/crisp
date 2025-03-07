@@ -22,6 +22,9 @@ export default defineConfig({
         twitter: "https://x.com/weburz",
       },
       lastUpdated: true,
+      sidebar: [
+        { label: "Developer Guide", autogenerate: { directory: "dev-guide" } },
+      ],
     }),
   ],
 });

@@ -1,5 +1,7 @@
 ---
 title: Software Requirements Specifications (SRS)
+sidebar:
+  order: 1
 ---
 
 This section of the documentations contains the "Software Requirements
