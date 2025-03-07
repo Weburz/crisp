@@ -12,10 +12,19 @@ linters:
     - staticcheck
     - unused
     - gofmt
+    - lll
+    - gci
 
   # Enable only fast linters from enabled linters set (first run won't be fast)
   # Default: false
   fast: true
+
+linters-settings:
+  lll:
+    # Max line length, lines longer will be reported.
+    line-length: 88
+    # Tab width in spaces.
+    tab-width: 4
 
 issues:
   new-from-rev: HEAD~1
