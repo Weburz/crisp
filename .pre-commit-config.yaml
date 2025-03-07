@@ -13,7 +13,7 @@ repos:
       - id: crisp
         name: lint git-commit messages
 
-  - repo: https://github.com/golangci/golangci-lint
-    rev: v1.64.6
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
     hooks:
       - id: golangci-lint
