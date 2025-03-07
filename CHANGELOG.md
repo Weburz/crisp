@@ -13,3 +13,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Enforce character length limit to 50. See
   [ the relevant issue ](https://github.com/Weburz/crisp/issues/24) thread for
   the same topic.
+- Updated documentations for developers (who are interested in contributing to
+  the project) and end users of the tool.
