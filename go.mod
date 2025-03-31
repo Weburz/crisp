@@ -1,6 +1,6 @@
 module github.com/Weburz/crisp
 
-go 1.22.2
+go 1.24.1
 
 require github.com/spf13/cobra v1.8.0
 
