@@ -60,10 +60,10 @@ func TestCheckMessageScope(t *testing.T) {
 			expectedError: "",
 		},
 		{
-			name:          "Invalid Scope - Uppercase",
-			scope:         "User",
-			expectedError: `invalid commit message scope casing, "User" should be "user"`, // Expected error message
-		},
+			name:  "Invalid Scope - Uppercase",
+			scope: "User",
+			expectedError: `invalid commit message scope casing, "User" ` +
+				`should be "user"`},
 	}
 
 	for _, tc := range testCases {
@@ -95,9 +95,10 @@ func TestCheckMessageSubject(t *testing.T) {
 			expectedError: "",
 		},
 		{
-			name:          "Invalid Subject - Uppercase",
-			subject:       "Add a new feature",
-			expectedError: "commit message subject should be lowercased & not end with a period(.)",
+			name:    "Invalid Subject - Uppercase",
+			subject: "Add a new feature",
+			expectedError: "commit message subject should be lowercased & " +
+				"not end with a period(.)",
 		},
 	}
 
@@ -130,10 +131,14 @@ func TestCheckMessageLength(t *testing.T) {
 			expectedError: "",
 		},
 		{
-			name:    "Invalid Length",
-			message: "Add a new feature that makes the application run faster and more efficiently",
-			expectedError: fmt.Sprintf("commit message exceeds 50 characters, current length: %d",
-				len("Add a new feature that makes the application run faster and more efficiently")),
+			name: "Invalid Length",
+			message: "Add a new feature that makes the application run " +
+				"faster and more efficiently",
+			expectedError: fmt.Sprintf(
+				"commit message exceeds 50 characters, current length: %d",
+				len("Add a new feature that makes the application run "+
+					"faster and more efficiently"),
+			),
 		},
 	}
 
@@ -188,7 +193,8 @@ func TestValidateMessage(t *testing.T) {
 				Scope:       "User",
 				Description: "add a new feature",
 			},
-			expectedError:   `invalid commit message scope casing, "User" should be "user"`,
+			expectedError: `invalid commit message scope casing, "User" ` +
+				`should be "user"`,
 			expectedMessage: "",
 		},
 		{
@@ -198,18 +204,23 @@ func TestValidateMessage(t *testing.T) {
 				Scope:       "user",
 				Description: "Add a new feature",
 			},
-			expectedError:   "commit message subject should be lowercased & not end with a period(.)",
+			expectedError: "commit message subject should be lowercased & " +
+				"not end with a period(.)",
 			expectedMessage: "",
 		},
 		{
 			name: "Invalid Message - Exceeds Length",
 			message: parser.Message{
-				Type:        "feat",
-				Scope:       "user",
-				Description: "add a new feature that makes the application run faster and more efficiently", // More than 50 chars
+				Type:  "feat",
+				Scope: "user",
+				Description: "add a new feature that makes the application run " +
+					"faster and more efficiently",
 			},
-			expectedError: fmt.Sprintf("commit message exceeds 50 characters, current length: %d",
-				len("Add a new feature that makes the application run faster and more efficiently")),
+			expectedError: fmt.Sprintf(
+				"commit message exceeds 50 characters, current length: %d",
+				len("Add a new feature that makes the application run "+
+					"faster and more efficiently"),
+			),
 			expectedMessage: "",
 		},
 		{
@@ -231,11 +242,14 @@ func TestValidateMessage(t *testing.T) {
 			if tc.expectedError == "" && err != nil {
 				t.Errorf("expected no error, got %v", err)
 			} else if err != nil && err.Error() != tc.expectedError {
-				t.Errorf("expected error %q, got %q", tc.expectedError, err.Error())
+				t.Errorf("expected error %q, got %q",
+					tc.expectedError, err.Error())
 			}
 
 			if messageResult != tc.expectedMessage {
-				t.Errorf("expected message %q, got %q", tc.expectedMessage, messageResult)
+				t.Errorf("expected message %q, got %q",
+					tc.expectedMessage, messageResult,
+				)
 			}
 		})
 	}
