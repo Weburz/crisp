@@ -8,7 +8,7 @@ in any way! To get started with using Crisp for your requirements, you have the
 following options:
 
 1. Use as a [Pre-Commit](https://pre-commit.com) hook (**RECOMMENDED**).
-2. Use as a standlone tool, either built from source or downloaded using a
+2. Use as a standalone tool, either built from source or downloaded using a
    package manager ([Homebrew](https://brew.sh), APT and so on) (**docs are
    WIP**, hence contributions are welcome).
 3. Use in a CI environment (**docs are WIP**, hence contributions are welcome).
