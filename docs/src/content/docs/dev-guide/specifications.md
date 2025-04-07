@@ -32,7 +32,7 @@ On top of the core functionality mentioned above, the following functionalities
 (and their similarities) should be outright considered out of scope for the
 project:
 
-1. Be a complete clone of a existing tools like
+1. Be a complete clone of an existing tool like
    [commitlint](https://commitlint.js.org) and so on.
 
 2. Provide shareable configurations (like `commitlint` does) since it beats the
