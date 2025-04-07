@@ -12,3 +12,9 @@ repos:
     hooks:
       - id: crisp
         name: lint git-commit messages
+
+  - repo: https://github.com/golangci/golangci-lint
+    rev: v2.0.2
+    hooks:
+      - id: golangci-lint
+        name: lint Go source code
