@@ -29,7 +29,7 @@ purposes they fulfill.
 | Subcommand   | Description                                        |
 | ------------ | -------------------------------------------------- |
 | `bash`       | Generate the autocompletion script for Bash.       |
-| `fish`       | Generate the autocompletion script Fish.           |
+| `fish`       | Generate the autocompletion script for Fish.       |
 | `powershell` | Generate the autocompletion script for PowerShell. |
 | `zsh`        | Generate the autocompletion script Zsh.            |
 
