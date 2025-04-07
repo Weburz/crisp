@@ -23,7 +23,18 @@ export default defineConfig({
       },
       lastUpdated: true,
       sidebar: [
-        { label: "Developer Guide", autogenerate: { directory: "dev-guide" } },
+        {
+          label: "Welcome",
+          autogenerate: {
+            directory: "usage-guide",
+          },
+        },
+        {
+          label: "Developer Guide",
+          autogenerate: {
+            directory: "dev-guide",
+          },
+        },
       ],
     }),
   ],
