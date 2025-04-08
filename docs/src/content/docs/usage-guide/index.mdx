@@ -2,6 +2,7 @@
 title: Getting Started
 description: Get started with using Crisp to lint your commit messages.
 ---
+import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 Getting started with using Crisp is very straight-forward and not very involved
 in any way! To get started with using Crisp for your requirements, you have the
@@ -66,15 +67,35 @@ distributions, MacOS and Windows. To get Crisp through your preferred choice of
 package manager on the platform you are using, follow the relevant instructions
 provided below:
 
-### Homebrew (TBA)
+### Linux
 
-### Winget (TBA)
+<Tabs>
+  <TabItem label="Debian/Ubuntu">
+    TBA
+  </TabItem>
+<TabItem label="Arch Linux (AUR)">
+    TBA
+  </TabItem><TabItem label="Fedora, RHEL, CentOS">
+    TBA
+  </TabItem>
+</Tabs>
 
-### Debian/Ubuntu (TBA)
+### MacOS
 
-### AUR (TBA)
+TBA
 
-### Fedora, RHEL, Centos (TBA)
+### Windows
+
+<Tabs>
+  <TabItem label="Winget">
+    TBA
+  </TabItem>
+<TabItem label="Scoop">
+    TBA
+  </TabItem><TabItem label="Chocolatey">
+    TBA
+  </TabItem>
+</Tabs>
 
 Post installation, run the following command to test whether Crisp was installed
 appropriately and is usable;
@@ -120,41 +141,41 @@ steps if you are interested in building Crisp from source code:
 
    The command will build the executable binary in the `bin` directory.
 
-4. Copy the built executable binary to the `~/.local/bin` directory (on
-   Linux/MacOS) or `C:\Program Files\Crisp` (on Windows).
+4. Copy the compiled executable binary to a preferred location on the filesystem.
 
-   **Linux/MacOS**:
+   <Tabs>
+     <TabItem label="Linux/MacOS">
+       ```console
+       mv ./bin/crisp ~/.local/bin/crisp
+       ```
+     </TabItem>
+     <TabItem label="Windows">
+       ```powershell
+       Copy-Item ".\bin\crisp" -Destination "C:\Program Files\Crisp"
+       ```
+     </TabItem>
+   </Tabs>
 
-   ```console
-   mv ./bin/crisp ~/.local/bin/crisp
-   ```
+5. Update your `$PATH` so that the binary is available and executable from any
+   location in the filesystem.
 
-   **Windows**:
+   <Tabs>
+     <TabItem label="Linux/MacOS">
+       To update the `$PATH`, you will have to add the following lines to the
+       `.bashrc`/`.zshrc` file (only on Linux and MacOS systems):
 
-   ```powershell
-   Copy-Item ".\bin\crisp" -Destination "C:\Program Files\Crisp"
-   ```
+       ```sh
+       export PATH="$PATH:$HOME/.local/bin"
+       ```
+     </TabItem>
+      <TabItem label="Windows">
+       Run the following command in a PowerShell session;
 
-5. With the executable binary copied to an appropriate location, you should now
-   update the `$PATH` variable of your system so that the `crisp` command can be
-   invoked from anywhere on your filesystem.
-
-   **Linux/MacOS**:
-
-   To update the `$PATH`, you will have to add the following lines to the
-   `.bashrc`/`.zshrc` file (only on Linux and MacOS systems):
-
-   ```sh
-   export PATH="$PATH:$HOME/.local/bin"
-   ```
-
-   **Windows**:
-
-   Run the following command in a PowerShell session;
-
-   ```powershell
-   $ENV:PATH += ";C:\Program Files\Crisp"
-   ```
+       ```powershell
+       $ENV:PATH += ";C:\Program Files\Crisp"
+       ```
+      </TabItem>
+   </Tabs>
 
 ## Usage in CI Environments
 
