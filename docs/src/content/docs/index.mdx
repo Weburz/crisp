@@ -11,7 +11,49 @@ hero:
     - text: Usage Guide
       link: /crisp/usage-guide
       icon: right-arrow
+    - text: Contribute on GitHub
+      link: https://github.com/Weburz/crisp
+      icon: external
+      variant: minimal
 next: false
 editUrl: false
 lastUpdated: false
 ---
+import { CardGrid, Card } from "@astrojs/starlight/components";
+import AboutWeburz from "../../components/about-weburz.astro";
+
+<CardGrid>
+  <Card title="Enforce Standardardised Rules" icon="document">
+    Enforce rules for authoring Git commit message which are legible and follows a
+    standardised practice. The rules are based on the
+    [Conventional Commits](https://conventionalcommits.org) specifications and is
+    heavily inspired from the [commitlint](https://commitlint.js.org) project.
+  </Card>
+  <Card title="Built With Go" icon="seti:go">
+    Crisp is built with the [Go](https://go.dev) programming language for speed,
+    efficiency and ease of usage/distribution as a coompiled executable binary.
+  </Card>
+  <Card title="First Class Support for Git Hooks" icon="seti:git">
+    Crisp provides first-class support for
+    [Git Hooks](https://git-scm.com/docs/githooks) with the help of the
+    [Pre-Commit](https://pre-commit.com) framework. Check out the
+    "[Getting Started](/crisp/usage-guide#pre-commit-hook)" section of the
+    documentation for more instructions.
+  </Card>
+  <Card title="Easy to Configure" icon="seti:config">
+    Unlike its alternative (especially [commitlint](https://commitlint.js.org)) is
+    extremely easy to configure requiring only knowledge of JSON, TOML or YAML!
+    Thanks to [Go](https://go.dev) and the
+    [`spf13/viper`](https://github.com/spf13/viper) package you no longer have to
+    deal with a [Node.js](https://nodejs.org) runtime just to run a linter for
+    commit messages.
+  </Card>
+</CardGrid>
+
+<AboutWeburz title="Made With Open-Source ❤️ by">
+  At Weburz we love building and sharing our open-source projects with the public to
+  play around with and of course contribute to. Join our open-source community and
+  see what does it have in offer for you!
+
+  [Learn more about Weburz](https://tech.weburz.com)
+</AboutWeburz>
