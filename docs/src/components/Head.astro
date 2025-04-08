@@ -1,0 +1,22 @@
+---
+// import Default from "@astrojs/starlight/components/Head.astro";
+import { Schema } from "astro-seo-schema";
+---
+
+<!-- <Default {...Astro.props}><slot /></Default> -->
+<Schema
+  item={{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Crisp",
+    description: "A linter for your Git commit messages.",
+    documentation: "https://tech.weburz.com/crisp/",
+    termsOfService: "https://weburz.com/terms-of-services",
+    provider: {
+      "@type": "Organization",
+      name: "Weburz Ltd",
+    },
+    // dateModified: Astro.locals.starlightRoute.lastUpdated?.toISOString(),
+    // headline: Astro.locals.starlightRoute.entry.data.title,
+  }}
+/>

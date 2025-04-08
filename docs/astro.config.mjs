@@ -37,6 +37,10 @@ export default defineConfig({
         },
       ],
       credits: true,
+      components: {
+        // TODO: Identify how to get it to work else it breaks compilation
+        // Head: "./src/components/Head.astro",
+      },
     }),
   ],
 });
