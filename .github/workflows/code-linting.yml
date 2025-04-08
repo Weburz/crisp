@@ -4,9 +4,13 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - "*.go"
   push:
     branches:
       - main
+    paths:
+      - "*.go"
 
 env:
   GO_VERSION: stable
@@ -16,18 +20,21 @@ permissions:
   contents: read
   pull-requests: read
 
-
 jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Checkout the Repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Go
+        uses: actions/setup-go@v5.4.0
         with:
           go-version: ${{ env.GO_VERSION }}
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v7.0.0
         with:
           version: ${{ env.GOLANGCI_LINT_VERSION }}
           only-new-issues: true
