@@ -12,6 +12,6 @@ indent_size = 4
 indent_style = space
 indent_size = 2
 
-[*.{mts,mjs}]
+[*.{mts,mjs,mdx}]
 indent_style = space
 indent_size = 2
