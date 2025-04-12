@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 
@@ -29,26 +30,44 @@ var messageCmd = &cobra.Command{
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		useStdin, _ := cmd.Flags().GetBool("stdin")
-
 		var message string
+		var err error
 
-		// Read from STDIN if possible else read from the flag passed to the command
 		if useStdin {
-			message, _ = reader.ReadStdin()
+			r := reader.NewStdinReader()
+			message, err = r.Read()
+			if err != nil {
+				cmd.PrintErrf(
+					"warning: failed to read stdin: %s, reading .git/COMMIT_EDITMSG\n",
+					err,
+				)
+
+				commitMsgFile := filepath.Join(".", ".git", "COMMIT_EDITMSG")
+				r, err := reader.NewFileReader(commitMsgFile)
+				if err != nil {
+					cmd.PrintErrf("error reading commit message file: %s\n", err)
+					os.Exit(1)
+				}
+				message, err = r.Read()
+				if err != nil {
+					cmd.PrintErrf("error reading commit message file: %s\n", err)
+					os.Exit(1)
+				}
+			}
 		} else {
+			if len(args) == 0 {
+				cmd.PrintErrln("error: no commit message provided")
+				os.Exit(1)
+			}
 			message = args[0]
 		}
 
-		// Convert the git-commit message into a Go struct for further validation
 		msg, err := parser.ParseMessage(message)
-
-		// Raise an error and exit with non-zero status if the parsing logic failed
 		if err != nil {
 			cmd.PrintErrf("error: %s\n", err)
 			os.Exit(1)
 		}
 
-		// Validate the "git-commit" message
 		if status, err := validator.ValidateMessage(&msg); err != nil {
 			cmd.PrintErrf("error: %s\n", err)
 			os.Exit(1)
