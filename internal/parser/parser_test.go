@@ -1,73 +1,99 @@
 package parser
 
 import (
+	"reflect"
 	"testing"
 )
 
-func TestParseMessage(t *testing.T) {
+func TestParse_ValidMessages(t *testing.T) {
+	parser := NewParser()
+
 	tests := []struct {
-		name      string
-		input     string
-		wantType  string
-		wantScope string
-		wantDesc  string
-		wantErr   bool
+		name     string
+		input    string
+		expected *CommitMessage
 	}{
 		{
-			name:      "Valid commit with scope",
-			input:     "feat(auth): add login feature",
-			wantType:  "feat",
-			wantScope: "auth",
-			wantDesc:  "add login feature",
-			wantErr:   false,
+			name:  "Header only",
+			input: "feat(auth): add login feature",
+			expected: &CommitMessage{
+				Type:        "feat",
+				Scope:       "auth",
+				Description: "add login feature",
+			},
 		},
 		{
-			name:      "Valid commit without scope",
-			input:     "fix: resolve bug",
-			wantType:  "fix",
-			wantScope: "",
-			wantDesc:  "resolve bug",
-			wantErr:   false,
+			name: "Header and Body",
+			input: `fix(parser): handle empty lines
+
+This fixes a bug where the parser crashed when encountering empty lines.`,
+			expected: &CommitMessage{
+				Type:        "fix",
+				Scope:       "parser",
+				Description: "handle empty lines",
+				Body:        "This fixes a bug where the parser crashed when encountering empty lines.",
+			},
 		},
 		{
-			name:    "Invalid format",
-			input:   "invalid commit message",
-			wantErr: true,
+			name: "Header, Body and Footer",
+			input: `feat(core): add config file support
+
+Allows reading from config.json and merging it with CLI args.
+
+BREAKING CHANGE: config CLI flags have changed.`,
+			expected: &CommitMessage{
+				Type:        "feat",
+				Scope:       "core",
+				Description: "add config file support",
+				Body:        "Allows reading from config.json and merging it with CLI args.",
+				Footer:      "BREAKING CHANGE: config CLI flags have changed.",
+			},
+		},
+		{
+			name: "Header with no scope",
+			input: `chore: update dependencies
+
+Minor version bumps for all packages.`,
+			expected: &CommitMessage{
+				Type:        "chore",
+				Scope:       "",
+				Description: "update dependencies",
+				Body:        "Minor version bumps for all packages.",
+			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := ParseMessage(tt.input)
-
-			// Check if error matches expectation
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Test Failed: expected error=%v, got error=%v", tt.wantErr, err)
+			result, err := parser.Parse(tt.input)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
 			}
+			if !reflect.DeepEqual(result, tt.expected) {
+				t.Errorf("expected %+v, got %+v", tt.expected, result)
+			}
+		})
+	}
+}
 
-			// Validate output if no error
+func TestParse_InvalidMessages(t *testing.T) {
+	parser := NewParser()
+
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"Empty message", ""},
+		{"Whitespace only", "   \n  \n"},
+		{"Missing colon", "feat(auth) add login feature"},
+		{"No type prefix", "add login feature"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := parser.Parse(tt.input)
 			if err == nil {
-				if result.Type != tt.wantType {
-					t.Errorf(
-						"Test Failed: expected Type='%s', got Type='%s'",
-						tt.wantType,
-						result.Type,
-					)
-				}
-				if result.Scope != tt.wantScope {
-					t.Errorf(
-						"Test Failed: expected Scope='%s', got Scope='%s'",
-						tt.wantScope,
-						result.Scope,
-					)
-				}
-				if result.Description != tt.wantDesc {
-					t.Errorf(
-						"Test Failed: expected Description='%s', got Description='%s'",
-						tt.wantDesc,
-						result.Description,
-					)
-				}
+				t.Errorf("expected an error for input: %q", tt.input)
 			}
 		})
 	}

@@ -62,13 +62,14 @@ var messageCmd = &cobra.Command{
 			message = args[0]
 		}
 
-		msg, err := parser.ParseMessage(message)
+		p := parser.NewParser()
+		m, err := p.Parse(message)
 		if err != nil {
 			cmd.PrintErrf("error: %s\n", err)
 			os.Exit(1)
 		}
 
-		if status, err := validator.ValidateMessage(&msg); err != nil {
+		if status, err := validator.ValidateMessage((*parser.Message)(m)); err != nil {
 			cmd.PrintErrf("error: %s\n", err)
 			os.Exit(1)
 		} else {
