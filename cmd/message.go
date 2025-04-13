@@ -69,7 +69,7 @@ var messageCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		if status, err := validator.ValidateMessage((*parser.Message)(m)); err != nil {
+		if status, err := validator.ValidateMessage(m); err != nil {
 			cmd.PrintErrf("error: %s\n", err)
 			os.Exit(1)
 		} else {
