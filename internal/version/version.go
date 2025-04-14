@@ -1,11 +1,9 @@
-/**
- * Package version - Handle various version information of Terox.
- *
- * The "version" package handles various version information like the Git, Go
- * and the compiler version. Along with those information, the package also
- * handles the Git commit hash to print out when the "terox version" command is
- * invoked.
- */
+// Package version provides build-time and runtime version information for Crisp.
+//
+// It includes details such as the semantic version, Git version, commit hash,
+// build date, Go runtime version, compiler, and target platform. These values
+// are intended to be set at build time using -ldflags and are typically
+// displayed when the `crisp version` command is executed.
 package version
 
 import (
@@ -13,53 +11,38 @@ import (
 	"runtime"
 )
 
-// Store the Git version, the commit hash and the build date to print the
-// version info.
+// These variables store version metadata and are meant to be overridden at build time
+// using -ldflags. For example:
+//
+// go build -ldflags="-X 'github.com/Weburz/crisp/internal/version.version=1.2.3' ..."
 var (
-	version    = "unknown"
-	gitVersion = "unknown"
-	gitCommit  = "unknown"
-	buildDate  = "unknown"
+	version    = "unknown" // Semantic version of the application
+	gitVersion = "unknown" // Git tag or descriptive version (e.g., v1.2.3-4-gabcdef)
+	gitCommit  = "unknown" // Git commit hash
+	buildDate  = "unknown" // Build date in YYYY-MM-DD format
 )
 
-/**
- * VersionInfo - A struct to contain the version information of the software.
- *
- * Fields:
- *   GitVersion: (string) The version of Git used to build Terox.
- *   GitCommit: (string) The commit hash used to build Terox.
- *   BuildDate: (string) The datetime string when the Terox binary was built.
- *   GoVersion: (string) The Go version used to compile the Terox binary.
- *   Compiler: (string) The compiler used to build and compile the Terox binary.
- *   Platform: (string) The platform (OS & architecture) of the Terox binary.
- */
-type VersionInfo struct {
-	Version    string
-	GitVersion string
-	GitCommit  string
-	BuildDate  string
-	GoVersion  string
-	Compiler   string
-	Platform   string
+// versionInfo holds metadata about the build and runtime environment.
+type versionInfo struct {
+	Version    string // Semantic version
+	GitVersion string // Git tag or descriptive version
+	GitCommit  string // Git commit hash
+	BuildDate  string // Build timestamp
+	GoVersion  string // Version of the Go runtime
+	Compiler   string // Compiler used (e.g., "gc")
+	Platform   string // OS/Architecture (e.g., linux/amd64)
 }
 
-/**
- * Get: Fetch and return the various version information.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   Returns an instance of the VersionInfo struct.
- */
-func Get() *VersionInfo {
-	return &VersionInfo{
+// GetVersionInfo returns a populated versionInfo struct containing both
+// build-time and runtime metadata about Crisp.
+func GetVersionInfo() *versionInfo {
+	return &versionInfo{
+		Version:    version,
 		GitVersion: gitVersion,
 		GitCommit:  gitCommit,
 		BuildDate:  buildDate,
 		GoVersion:  runtime.Version(),
 		Compiler:   runtime.Compiler,
-		Version:    version,
 		Platform:   fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
 	}
 }

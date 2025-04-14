@@ -11,7 +11,7 @@ var rootCmd = &cobra.Command{
 	Use:   "crisp",
 	Short: "A linter for Git commit messages.",
 	Long: `A linter to check whether your Git commit messages are according to
-the "commitlint" specifications.`,
+the Conventional Commits spec.`,
 }
 
 // Execute adds all child commands to the root command and sets flags
