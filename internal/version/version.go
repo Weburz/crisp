@@ -22,18 +22,7 @@ var (
 	buildDate  = "unknown"
 )
 
-/**
- * VersionInfo - A struct to contain the version information of the software.
- *
- * Fields:
- *   GitVersion: (string) The version of Git used to build Terox.
- *   GitCommit: (string) The commit hash used to build Terox.
- *   BuildDate: (string) The datetime string when the Terox binary was built.
- *   GoVersion: (string) The Go version used to compile the Terox binary.
- *   Compiler: (string) The compiler used to build and compile the Terox binary.
- *   Platform: (string) The platform (OS & architecture) of the Terox binary.
- */
-type VersionInfo struct {
+type versionInfo struct {
 	Version    string
 	GitVersion string
 	GitCommit  string
@@ -43,23 +32,14 @@ type VersionInfo struct {
 	Platform   string
 }
 
-/**
- * Get: Fetch and return the various version information.
- *
- * Parameters:
- *   None
- *
- * Returns:
- *   Returns an instance of the VersionInfo struct.
- */
-func Get() *VersionInfo {
-	return &VersionInfo{
+func GetVersionInfo() *versionInfo {
+	return &versionInfo{
+		Version:    version,
 		GitVersion: gitVersion,
 		GitCommit:  gitCommit,
 		BuildDate:  buildDate,
 		GoVersion:  runtime.Version(),
 		Compiler:   runtime.Compiler,
-		Version:    version,
 		Platform:   fmt.Sprintf("%s/%s", runtime.GOOS, runtime.GOARCH),
 	}
 }
