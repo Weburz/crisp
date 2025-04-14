@@ -1,22 +1,30 @@
 name: Feature Request
 description: Suggest a feature request or an enhancement
-title: "[ENHANCEMENT]: "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for recommending the enhancement!
+      value:
+        Thank you for taking your time to recommend a feature but before that,
+        we appreciate it if you can read through Crisp's Software Requirement
+        Specifications (SRS). It is a two minutes read and will walk you through
+        what kind of features will be accepted for inclusion in Crisp's source
+        code.
+
   - type: textarea
     id: feature-enhancement
     attributes:
-      label: Explain the feature
+      label: Elaborate the functionalities of the feature.
       description:
-        Explain the enhancement or feature requests you have in mind, in as much
-        details as possible.
-      placeholder: Explain the feature and/or the enhancement in full detail.
-      value:
-        Implement XYZ feature which provides so and so capabilities to the
-        website...
+        Provide a detailed description of the feature enhancement you want to
+        provide with Crisp and how will its inclusion help its user achieve
+        their goals.
+      placeholder: "The XYZ functionality is expected to provide the users of
+        Crisp the following enhancements:
+
+        1. It is going to do an awesome job! 2. It will enforce a strict rule
+        for everyone to follow standard practices when authoring commit
+        messages.
+        "
     validations:
       required: true

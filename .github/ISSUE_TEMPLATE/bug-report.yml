@@ -1,22 +1,25 @@
 name: Bug Report
 description: File a bug report
-title: "[BUG]: "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
+      value:
+        Thanks for taking the time to fill out this bug report! Please be as
+        descriptive about the bug as you possibly can. It will help us better
+        understand at identifying the root cause of the bug.
+
   - type: textarea
     id: what-happened
     attributes:
-      label: Explain the Bug
+      label: Explain where the bug is
       description:
-        Explain in details the bug you encountered and the expected behaviour.
+        Elaborate the unintended behaviour and why you believe it is a bug and
+        what the intended behaviour should be like.
       placeholder: Explain the bug and the intended behaviour in detail.
-      value: "A bug happened!"
     validations:
       required: true
+
   - type: textarea
     id: logs
     attributes:
@@ -25,6 +28,7 @@ body:
         Please copy and paste any relevant log output. This will be
         automatically formatted into code, so no need for backticks.
       render: Shell
+
   - type: textarea
     id: screenshots
     attributes:
