@@ -139,3 +139,58 @@ func TestValidateMessage(t *testing.T) {
 		})
 	}
 }
+
+func TestIsValidLength(t *testing.T) {
+	v := NewValidator()
+
+	tests := []struct {
+		name        string
+		input       string
+		wantErr     bool
+		expectedErr string
+	}{
+		{
+			name:    "valid length message under 50 characters",
+			input:   "feat(auth): add OAuth2 login flow",
+			wantErr: false,
+		},
+		{
+			name:    "valid length message exactly 50 characters",
+			input:   "fix(parser): handle nil pointers in error check",
+			wantErr: false,
+		},
+		{
+			name: "invalid length message over 50 characters",
+			input: "feat(user): this message definitely exceeds the fifty " +
+				"character limit",
+			wantErr:     true,
+			expectedErr: "commit message is 69 long but expected length should be 50",
+		},
+		{
+			name:    "empty message is valid",
+			input:   "",
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := v.isValidLength(tt.input)
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("expected error, got nil")
+				} else if err.Error() != tt.expectedErr {
+					t.Errorf(
+						"unexpected error message:\ngot:  %s\nwant: %s",
+						err.Error(),
+						tt.expectedErr,
+					)
+				}
+			} else {
+				if err != nil {
+					t.Errorf("expected no error, got: %v", err)
+				}
+			}
+		})
+	}
+}

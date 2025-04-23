@@ -92,6 +92,30 @@ func (v *validator) isValidSubject(s string) error {
 	return nil
 }
 
+// isValidLength checks whether the length of the given commit message string does not
+// exceed the predefined character limit.
+//
+// It enforces a hard limit of 50 characters, as recommended by the Conventional Commits
+// specification for concise subject lines.
+//
+// Parameters:
+//   - s: The commit message string to validate.
+//
+// Returns:
+//   - An error if the message exceeds the 50-character limit.
+//   - nil if the message length is within the allowed limit.
+func (v *validator) isValidLength(s string) error {
+	charLimit := 50
+	if len(s) > charLimit {
+		return fmt.Errorf(
+			"commit message is %d long but expected length should be %d",
+			len(s),
+			charLimit,
+		)
+	}
+	return nil
+}
+
 // ValidateMessage() validates a Conventional Commit message.
 //
 // It checks the type, scope and subject of the committ message for validation errors.
@@ -99,6 +123,20 @@ func (v *validator) isValidSubject(s string) error {
 // a successfull validation.
 func ValidateMessage(s *parser.CommitMessage) (string, error) {
 	v := NewValidator()
+
+	// Validate the commit message length (should not be more than 50 characters long)
+	var fullMessage string
+	if s.Scope != "" {
+		fullMessage = fmt.Sprintf("%s(%s): %s", s.Type, s.Scope, s.Description)
+	} else {
+		fullMessage = fmt.Sprintf("%s: %s", s.Type, s.Description)
+	}
+	fullMessage = strings.TrimSpace(fullMessage)
+
+	// Validate the full commit message length
+	if err := v.isValidLength(fullMessage); err != nil {
+		return "", err
+	}
 
 	// Validate the commit message type and return an appropriate message else an error
 	if err := v.isValidType(s.Type); err != nil {
