@@ -31,7 +31,8 @@ This fixes a bug where the parser crashed when encountering empty lines.`,
 				Type:        "fix",
 				Scope:       "parser",
 				Description: "handle empty lines",
-				Body:        "This fixes a bug where the parser crashed when encountering empty lines.",
+				Body: "This fixes a bug where the parser crashed when " +
+					"encountering empty lines.",
 			},
 		},
 		{
@@ -45,8 +46,9 @@ BREAKING CHANGE: config CLI flags have changed.`,
 				Type:        "feat",
 				Scope:       "core",
 				Description: "add config file support",
-				Body:        "Allows reading from config.json and merging it with CLI args.",
-				Footer:      "BREAKING CHANGE: config CLI flags have changed.",
+				Body: "Allows reading from config.json and merging it with " +
+					"CLI args.",
+				Footer: "BREAKING CHANGE: config CLI flags have changed.",
 			},
 		},
 		{
@@ -94,6 +96,45 @@ func TestParse_InvalidMessages(t *testing.T) {
 			_, err := parser.Parse(tt.input)
 			if err == nil {
 				t.Errorf("expected an error for input: %q", tt.input)
+			}
+		})
+	}
+}
+
+func TestParse_BreakingChanges(t *testing.T) {
+	parser := NewParser()
+
+	tests := []struct {
+		name     string
+		input    string
+		wantType string
+		wantBang bool
+	}{
+		{
+			name:     "Breaking change with exclamation",
+			input:    "feat!: send an email to the customer when a product is shipped",
+			wantType: "feat",
+			wantBang: true,
+		},
+		{
+			name:     "Breaking change with scope and exclamation",
+			input:    "chore(parser)!: major rewrite for performance",
+			wantType: "chore",
+			wantBang: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := parser.Parse(tt.input)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if result.Type != tt.wantType {
+				t.Errorf("got type = %q; want %q", result.Type, tt.wantType)
+			}
+			if result.IsBreaking != tt.wantBang {
+				t.Errorf("got breaking = %v; want %v", result.IsBreaking, tt.wantBang)
 			}
 		})
 	}
