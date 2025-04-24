@@ -23,6 +23,7 @@ type Parser interface {
 //   - Footer: The optional metadata such as a breaking changes or issues closed info.
 type CommitMessage struct {
 	Type, Scope, Description, Body, Footer string
+	IsBreaking                             bool
 }
 
 // The `parserImpl` is the internal implementation of the `Parser` interface.
@@ -50,7 +51,7 @@ func (p *parserImpl) Parse(message string) (*CommitMessage, error) {
 		return nil, errors.New("no commit message was passed")
 	}
 
-	headerPattern := regexp.MustCompile(`^(\w+)(?:\(([^)]+)\))?:\s*(.+)$`)
+	headerPattern := regexp.MustCompile(`^([a-zA-Z]+)(?:\(([^)]+)\))?(!)?:\s*(.+)$`)
 	matches := headerPattern.FindStringSubmatch(lines[0])
 	if matches == nil {
 		return nil, errors.New("failed to parse the commit header")
@@ -59,7 +60,8 @@ func (p *parserImpl) Parse(message string) (*CommitMessage, error) {
 	parsed := &CommitMessage{
 		Type:        matches[1],
 		Scope:       matches[2],
-		Description: matches[3],
+		IsBreaking:  matches[3] == "!",
+		Description: matches[4],
 	}
 
 	if len(lines) > 1 {
