@@ -50,6 +50,7 @@ export default defineConfig({
       components: {
         // TODO: Identify how to get it to work else it breaks compilation
         // Head: "./src/components/Head.astro",
+        PageFrame: "./src/components/PageFrame.astro",
       },
     }),
   ],

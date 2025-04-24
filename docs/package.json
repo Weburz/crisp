@@ -14,6 +14,7 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/starlight": "^0.29.3",
     "@beoe/cache": "^0.1.1",
+    "@beoe/pan-zoom": "^0.0.4",
     "@beoe/rehype-mermaid": "^0.4.2",
     "astro": "^4.16.18",
     "astro-seo-schema": "^5.0.0",
