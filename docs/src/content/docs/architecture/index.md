@@ -25,27 +25,36 @@ sequenceDiagram
 
     actor User
 
-    box Gray Crisp Internals
+    box rgb(117, 115, 109) Crisp Internals
         participant Reader
         participant Parser
         participant Validator
     end
 
     Note over User,Reader: The commit message linting should<br/>ideally be done using the<br/>Pre-Commit framework!
-    User ->> Reader : Pass message to Crisp
+    User ->> Reader : Make a Git commit
 
     activate User
 
     activate Reader
-        Reader -->> Parser : Crisp parses the message
+        alt read from STDIN
+            Reader -->> Parser : Read from piped input
+        else read from COMMIT_EDITMSG
+            Reader -->> Parser : Read from file
+        end
+        opt pass message as flag
+            Reader -->> Parser : Read from CLI flag
+        end
     deactivate Reader
 
     activate Parser
+        Parser -->> Parser : Parse the message into a struct
         Parser -->> Validator : Crisp validates the message
     deactivate Parser
 
     activate Validator
-    Validator ->> User : Crisp responds with valid/invalid message
+
+            Validator ->> User : Crisp responds with valid/invalid message
     deactivate Validator
 
     deactivate User
