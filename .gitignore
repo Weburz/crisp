@@ -207,6 +207,7 @@ dist
 
 ### Starlight ###
 **/.astro
+**/public/beoe
 
 ### Taskfile ###
 .task

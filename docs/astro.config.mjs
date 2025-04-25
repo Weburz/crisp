@@ -1,5 +1,9 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { rehypeMermaid } from "@beoe/rehype-mermaid";
+import { getCache } from "@beoe/cache";
+
+const cache = getCache();
 
 export default defineConfig({
   site: "https://weburz.github.io/crisp",
@@ -35,12 +39,32 @@ export default defineConfig({
             directory: "dev-guide",
           },
         },
+        {
+          label: "Software Architecture",
+          autogenerate: {
+            directory: "architecture",
+          },
+        },
       ],
       credits: true,
       components: {
         // TODO: Identify how to get it to work else it breaks compilation
         // Head: "./src/components/Head.astro",
+        PageFrame: "./src/components/PageFrame.astro",
       },
     }),
   ],
+  markdown: {
+    rehypePlugins: [
+      [
+        rehypeMermaid,
+        {
+          strategy: "file",
+          fsPath: "public/beoe",
+          webPath: "/crisp/beoe",
+          cache,
+        },
+      ],
+    ],
+  },
 });

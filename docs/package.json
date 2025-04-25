@@ -7,13 +7,18 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "playwright install chromium"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/starlight": "^0.29.3",
+    "@beoe/cache": "^0.1.1",
+    "@beoe/pan-zoom": "^0.0.4",
+    "@beoe/rehype-mermaid": "^0.4.2",
     "astro": "^4.16.18",
     "astro-seo-schema": "^5.0.0",
+    "playwright": "^1.52.0",
     "schema-dts": "^1.1.5",
     "sharp": "^0.33.5",
     "typescript": "^5.7.3"
