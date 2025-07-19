@@ -5,137 +5,173 @@ import (
 	"testing"
 )
 
-func TestParse_ValidMessages(t *testing.T) {
-	parser := NewParser()
-
+func TestParseHeader(t *testing.T) {
 	tests := []struct {
-		name     string
-		input    string
-		expected *CommitMessage
+		name          string
+		input         string
+		expectedType  string
+		expectedScope string
+		expectedDesc  string
+		expectError   bool
 	}{
 		{
-			name:  "Header only",
-			input: "feat(auth): add login feature",
-			expected: &CommitMessage{
-				Type:        "feat",
-				Scope:       "auth",
-				Description: "add login feature",
-			},
+			name:          "valid header with scope",
+			input:         "feat(parser): add new feature",
+			expectedType:  "feat",
+			expectedScope: "parser",
+			expectedDesc:  "add new feature",
 		},
 		{
-			name: "Header and Body",
-			input: `fix(parser): handle empty lines
-
-This fixes a bug where the parser crashed when encountering empty lines.`,
-			expected: &CommitMessage{
-				Type:        "fix",
-				Scope:       "parser",
-				Description: "handle empty lines",
-				Body: "This fixes a bug where the parser crashed when " +
-					"encountering empty lines.",
-			},
+			name:         "valid header without scope",
+			input:        "fix: correct typo",
+			expectedType: "fix",
+			expectedDesc: "correct typo",
 		},
 		{
-			name: "Header, Body and Footer",
-			input: `feat(core): add config file support
-
-Allows reading from config.json and merging it with CLI args.
-
-BREAKING CHANGE: config CLI flags have changed.`,
-			expected: &CommitMessage{
-				Type:        "feat",
-				Scope:       "core",
-				Description: "add config file support",
-				Body: "Allows reading from config.json and merging it with " +
-					"CLI args.",
-				Footer: "BREAKING CHANGE: config CLI flags have changed.",
-			},
-		},
-		{
-			name: "Header with no scope",
-			input: `chore: update dependencies
-
-Minor version bumps for all packages.`,
-			expected: &CommitMessage{
-				Type:        "chore",
-				Scope:       "",
-				Description: "update dependencies",
-				Body:        "Minor version bumps for all packages.",
-			},
+			name:        "invalid header format",
+			input:       "invalid header line",
+			expectError: true,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result, err := parser.Parse(tt.input)
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
+			typ, scope, desc, err := parseHeader(tt.input)
+			if tt.expectError && err == nil {
+				t.Fatalf("expected error but got none")
 			}
-			if !reflect.DeepEqual(result, tt.expected) {
-				t.Errorf("expected %+v, got %+v", tt.expected, result)
+			if !tt.expectError {
+				if typ != tt.expectedType || scope != tt.expectedScope ||
+					desc != tt.expectedDesc {
+					t.Errorf(
+						"expected (%s, %s, %s), got (%s, %s, %s)",
+						tt.expectedType,
+						tt.expectedScope,
+						tt.expectedDesc,
+						typ,
+						scope,
+						desc,
+					)
+				}
 			}
 		})
 	}
 }
 
-func TestParse_InvalidMessages(t *testing.T) {
-	parser := NewParser()
-
+func TestTryParseFooter(t *testing.T) {
 	tests := []struct {
-		name  string
-		input string
+		input       string
+		expectKey   string
+		expectValue string
+		expectOK    bool
 	}{
-		{"Empty message", ""},
-		{"Whitespace only", "   \n  \n"},
-		{"Missing colon", "feat(auth) add login feature"},
-		{"No type prefix", "add login feature"},
+		{
+			"BREAKING CHANGE: update API behavior",
+			"BREAKING CHANGE",
+			"update API behavior",
+			true,
+		},
+		{"Fixes: #123", "Fixes", "#123", true},
+		{"Random line", "", "", false},
+		{"NotAFooter - no colon", "", "", false},
 	}
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			_, err := parser.Parse(tt.input)
-			if err == nil {
-				t.Errorf("expected an error for input: %q", tt.input)
-			}
-		})
+		key, val, ok := tryParseFooter(tt.input)
+		if ok != tt.expectOK || key != tt.expectKey || val != tt.expectValue {
+			t.Errorf(
+				"for input %q: expected (%q, %q, %v), got (%q, %q, %v)",
+				tt.input,
+				tt.expectKey,
+				tt.expectValue,
+				tt.expectOK,
+				key,
+				val,
+				ok,
+			)
+		}
 	}
 }
 
-func TestParse_BreakingChanges(t *testing.T) {
-	parser := NewParser()
+func TestParseBodyAndFooter(t *testing.T) {
+	lines := []string{
+		"",
+		"This is a detailed explanation.",
+		"BREAKING CHANGE: legacy tags are not supported",
+		"Closes: #42",
+	}
 
-	tests := []struct {
-		name     string
-		input    string
-		wantType string
-		wantBang bool
-	}{
-		{
-			name:     "Breaking change with exclamation",
-			input:    "feat!: send an email to the customer when a product is shipped",
-			wantType: "feat",
-			wantBang: true,
-		},
-		{
-			name:     "Breaking change with scope and exclamation",
-			input:    "chore(parser)!: major rewrite for performance",
-			wantType: "chore",
-			wantBang: true,
+	expectedBody := "This is a detailed explanation."
+	expectedFooters := map[string]string{
+		"BREAKING CHANGE": "legacy tags are not supported",
+		"Closes":          "#42",
+	}
+
+	body, footers := parseBodyAndFooter(lines)
+
+	if body != expectedBody {
+		t.Errorf("expected body %q, got %q", expectedBody, body)
+	}
+
+	if !reflect.DeepEqual(footers, expectedFooters) {
+		t.Errorf("expected footers %+v, got %+v", expectedFooters, footers)
+	}
+}
+
+func TestParseCommitMessage(t *testing.T) {
+	message := `feat(auth): add OAuth login
+
+Implements login with OAuth 2.0 to support third-party auth.
+
+BREAKING CHANGE: existing login method removed
+Fixes: #101`
+
+	expected := &CommitMessage{
+		Type:        "feat",
+		Scope:       "auth",
+		Description: "add OAuth login",
+		Body:        "Implements login with OAuth 2.0 to support third-party auth.",
+		Footers: map[string]string{
+			"BREAKING CHANGE": "existing login method removed",
+			"Fixes":           "#101",
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result, err := parser.Parse(tt.input)
-			if err != nil {
-				t.Fatalf("unexpected error: %v", err)
-			}
-			if result.Type != tt.wantType {
-				t.Errorf("got type = %q; want %q", result.Type, tt.wantType)
-			}
-			if result.IsBreaking != tt.wantBang {
-				t.Errorf("got breaking = %v; want %v", result.IsBreaking, tt.wantBang)
-			}
-		})
+	got, err := ParseCommitMessage(message)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if got.Type != expected.Type || got.Scope != expected.Scope ||
+		got.Description != expected.Description {
+		t.Errorf("unexpected header fields: got %+v, want %+v", got, expected)
+	}
+
+	if got.Body != expected.Body {
+		t.Errorf("unexpected body: got %q, want %q", got.Body, expected.Body)
+	}
+
+	if !reflect.DeepEqual(got.Footers, expected.Footers) {
+		t.Errorf("unexpected footers: got %+v, want %+v", got.Footers, expected.Footers)
+	}
+}
+
+func TestParseCommitMessage_InvalidHeader(t *testing.T) {
+	message := `This is not a conventional commit
+
+Just some message with no proper format`
+
+	_, err := ParseCommitMessage(message)
+	if err == nil {
+		t.Fatal("expected error for invalid commit message, got none")
+	}
+}
+
+func TestIsKnownFooter(t *testing.T) {
+	if isKnownFooter("Reviewed-by") {
+		t.Error("expected Reviewed-by to be unknown footer")
+	}
+	if !isKnownFooter("BREAKING CHANGE") {
+		t.Error("expected BREAKING CHANGE to be known footer")
 	}
 }
