@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -62,18 +61,19 @@ var messageCmd = &cobra.Command{
 			message = args[0]
 		}
 
-		p := parser.NewParser()
-		m, err := p.Parse(message)
+		// Parse the commit message for further validation
+		p, err := parser.ParseCommitMessage(message)
 		if err != nil {
-			cmd.PrintErrf("error: %s\n", err)
+			cmd.PrintErrf("%s\n", err)
 			os.Exit(1)
 		}
 
-		if status, err := validator.ValidateMessage(m); err != nil {
-			cmd.PrintErrf("error: %s\n", err)
+		// Validate the parsed commit message for apropriate stucture and format
+		if status, err := validator.ValidateMessage(p); err != nil {
+			cmd.PrintErrf("%s\n", err)
 			os.Exit(1)
 		} else {
-			fmt.Println(status)
+			cmd.Println(status)
 		}
 	},
 }
