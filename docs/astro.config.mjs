@@ -6,8 +6,7 @@ import { getCache } from "@beoe/cache";
 const cache = getCache();
 
 export default defineConfig({
-  site: "https://weburz.github.io/crisp",
-  base: "crisp",
+  site: "https://crisp.weburz.com",
   integrations: [
     starlight({
       title: "Crisp",
@@ -61,7 +60,7 @@ export default defineConfig({
         {
           strategy: "file",
           fsPath: "public/beoe",
-          webPath: "/crisp/beoe",
+          webPath: "/beoe",
           cache,
         },
       ],

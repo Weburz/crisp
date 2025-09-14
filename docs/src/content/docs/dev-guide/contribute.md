@@ -8,7 +8,7 @@ sidebar:
   order: 2
 ---
 
-[Crisp](https://tech.weburz.com/crisp) is a Free and Open Source Software
+[Crisp](https://crisp.weburz.com) is a Free and Open Source Software
 (FOSS), hence we welcome contributions from everyone and aim to make this
 project a positive and collaborative space for everyone involved with it.
 
