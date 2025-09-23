@@ -10,7 +10,7 @@ sidebar:
 ---
 
 This document outlines the development process for
-[Crisp](https://tech.weburz.com/crisp), a command-line interface (CLI) tool
+[Crisp](https://crisp.weburz.com), a command-line interface (CLI) tool
 built with the [Go](https://go.dev) programming language. This section of the
 documentation provides a detailed process for developing Crisp. Adhering to this
 process ensures smooth collaboration and code quality.
