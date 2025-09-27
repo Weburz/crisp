@@ -25,6 +25,16 @@ export default defineConfig({
         twitter: "https://x.com/weburz",
       },
       lastUpdated: true,
+      head: [
+        {
+          tag: "script",
+          attrs: {
+            async: true,
+            src: "https://analytics.weburz.com/script.js",
+            "data-website-id": "a6162e4d-1c78-420f-80b3-7343131d34a4",
+          },
+        },
+      ],
       sidebar: [
         {
           label: "Welcome",
@@ -53,6 +63,7 @@ export default defineConfig({
       },
     }),
   ],
+
   markdown: {
     rehypePlugins: [
       [
