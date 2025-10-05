@@ -19,41 +19,14 @@ ways to get started with using Crisp.
 
 ## Pre-Commit Hook
 
-The easiest way to use Crisp is as a Pre-Commit hook. There are two setup
-approaches you can use, with **Approach 2** being recommended for its
-simplicity and straightforward command.
+The easiest way to use Crisp is as a Pre-Commit hook. The **RECOMMENDED**
+approach is to add the [`default_install_hook_types`](https://[pre-commit](https://pre-commit.com/#top_level-default_install_hook_types).com/#top_level-default_install_hook_types)
+to the `.pre-commit-config.yaml` file.
+The other approach is to explicitly pass the [`--hook-type commit-msg`](https://[pre-commit]https://pre-commit.com/#commit-msg) flag to the
+`pre-commit install ...` command. You can find more configuration options
+Pre-Commit in the [official documentation](https://[pre-commit](https://pre-commit.com/#adding-pre-commit-plugins-to-your-project).com/#adding-pre-commit-plugins-to-your-project).
 
-### Approach 1
-
-1. Ensure Pre-Commit is locally installed and accessible (following the
-   [official installation guidelines](https://pre-commit.com#installation)).
-
-2. Create a `.pre-commit-config.yaml` file with the following contents:
-
-   ```yaml
-   repos:
-     - repo: https://github.com/Weburz/crisp
-       rev: "v1.0.0"
-       hooks:
-         - id: crisp
-   ```
-
-3. Setup the hooks for your project by executing:
-
-   ```console
-   pre-commit install --install-hooks --hook-type commit-msg
-   ```
-
-4. To test out whether Crisp is working as part of your Pre-Commit hooks, try
-   adding a dummy commit like so:
-
-   ```console
-   touch .gitkeep
-   git add .gitkeep
-   git commit -m 'chore: added a dummy .gitkeep file'
-   ```
-
-### Approach 2 (RECOMMENDED)
+### YAML File Based Configuration (RECOMMENDED)
 
 1. Ensure Pre-Commit is locally installed and accessible (following the
    [official installation guidelines](https://pre-commit.com#installation)).
@@ -95,11 +68,42 @@ simplicity and straightforward command.
    git add .gitkeep
    git commit -m 'chore: added a dummy .gitkeep file'
    ```
-If Crisp was setup properly using any of the above approaches, you will see either
-a passing/failing message on STDOUT. If the output is a failing message then your
-commit message obviously does not follow the
-[Conventional Commits specifications](https://conventionalcommits.org) and you
-will have to improve it accordingly.
+
+### Explicit CLI Flag Configuration
+
+1. Ensure Pre-Commit is locally installed and accessible (following the
+   [official installation guidelines](https://pre-commit.com#installation)).
+
+2. Create a `.pre-commit-config.yaml` file with the following contents:
+
+   ```yaml
+   repos:
+     - repo: https://github.com/Weburz/crisp
+       rev: "v1.0.0"
+       hooks:
+         - id: crisp
+   ```
+
+3. Setup the hooks for your project by executing:
+
+   ```console
+   pre-commit install --install-hooks --hook-type commit-msg
+   ```
+
+4. To test out whether Crisp is working as part of your Pre-Commit hooks, try
+   adding a dummy commit like so:
+
+   ```console
+   touch .gitkeep
+   git add .gitkeep
+   git commit -m 'chore: added a dummy .gitkeep file'
+   ```
+
+If the Pre-Commit hook for Crisp was set up as expected, then you should see a
+passing status check if the specified commit message follows the
+[Conventional Commits specifications](https://conventionalcommits.org).
+Otherwise, you will be prompted by an error message with details of the
+inconsistent commit message.
 
 ## Install Using a Package Manager
 
